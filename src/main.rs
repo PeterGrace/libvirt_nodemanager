@@ -20,11 +20,11 @@ async fn main() {
     );
     let client = Client::try_default().await.unwrap();
     let nodes: Api<Node> = Api::all(client);
-    watcher(nodes, watcher::Config::default()).applied_objects()
+    let _ = watcher(nodes, watcher::Config::default()).applied_objects()
         .try_for_each(|p: Node| async move {
             for taint in p.clone().spec.unwrap().taints.iter() {
                 for f in taint.iter() {
-                    if f.key == "DeletionCandidateOfClusterAutoscaler" {
+                    if f.key == "DeletionCandidateOfClusterAutoscaler" || f.key == "ToBeDeletedByClusterAutoscaler"{
                         info!{"Node {} is candidate for deletion.", p.name_any()};
                         let conditions = p.status.clone().unwrap().conditions.unwrap();
                         for condition in conditions.iter() {

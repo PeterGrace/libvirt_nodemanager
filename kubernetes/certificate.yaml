@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+    cert-manager.io/allow-direct-injection: "true"
+  name: libvirt-nodemanager
+spec:
+  secretName: libvirt-nodemanager-tls
+  dnsNames:
+    - libvirt-nodemanager.autoscaler
+    - libvirt-nodemanager.autoscaler.svc
+    - libvirt-nodemanager.autoscaler.svc.cluster.local
+  issuerRef:
+    name: selfsigned
